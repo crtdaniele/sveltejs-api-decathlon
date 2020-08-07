@@ -1,7 +1,7 @@
 <script>
     import { Email, LinkedIn, WhatsApp, Facebook, Twitter } from 'svelte-share-buttons-component';
 
-	const url = 'https://whatsportisit.herokuapp.com';
+	const url = 'https://whatsportisit.netlify.app';
 	const title = 'What sport is it?';
 	const desc = 'Upload an image e discover what kind of sport is it!';
 </script>
