@@ -2,9 +2,8 @@
     import sportVision from '../../controllers/sportVision.js';
     import { Circle2 } from 'svelte-loading-spinners'
     import { API_KEY, API_SPORT_VISION } from '../../api/';
-    let files;
-    let error, loading = false;
-    let result = {};
+    let files, name, probability, location;
+    let error, loading, result = false;
 
     const handleSubmit = (e) => {
         if(files !== undefined){
@@ -12,8 +11,22 @@
             loading = true;
             sportVision(API_KEY, API_SPORT_VISION, files)
             .then(response => {
-                result = response;
+                if(response.hasOwnProperty('data')){
+                    if(response.data.hasOwnProperty('sport')){
+                        result = true;
+                        name = response.data.sport[0].hasOwnProperty('name') ? response.data.sport[0].name.replace("_", " ") : '';
+                        probability = response.data.sport[0].hasOwnProperty('probability') ? response.data.sport[0].probability : '';
+                    }
+                    if(response.data.hasOwnProperty('location')){
+                        let newOrderLocation = [...response.data.location];
+                        newOrderLocation.hasOwnProperty('probability') ? newOrderLocation.sort((a, b) => b.probability - a.probability) : '';
+                        location = newOrderLocation[0].hasOwnProperty('name') ? newOrderLocation[0].name : '';
+                    }
+                }
                 loading = false;
+            })
+            .catch(err => {
+                error = true;
             });
         }else{
             error = true;
@@ -48,9 +61,6 @@
     button{
         margin-top: 30px !important;
     }
-    .formImage__success{
-
-    }
     .formImage__success h2{
         margin-bottom: 20px;
         font-size: 2rem;
@@ -68,12 +78,12 @@
                     Please, upload an image!
                 </div>
             {/if}
-            {#if result.data}
+            {#if result}
                 <div class="formImage__success">
-                    <h2>{result.data.sport[0].name.toUpperCase()}? It's right?</h2>
-                    <p><strong>Probability:</strong> {result.data.sport[0].probability}</p>
-                    <p><strong>Location:</strong> {result.data.location[0].name}</p>
-                    <p><a target="_blank" href="https://en.wikipedia.org/wiki/{result.data.sport[0].name}">Look on Wikipedia</a></p>
+                    <h2>{name.toUpperCase()}? It's right?</h2>
+                    <p><strong>Probability:</strong> {probability}</p>
+                    <p><strong>Location:</strong> {location}</p>
+                    <p><a target="_blank" href="https://en.wikipedia.org/wiki/{name}">Look on Wikipedia</a></p>
                 </div>
             {:else if loading}
                 <div class="formImage__loading">
