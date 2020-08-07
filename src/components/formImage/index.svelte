@@ -68,12 +68,12 @@
                     Please, upload an image!
                 </div>
             {/if}
-            {#if result?.data}
+            {#if result.data}
                 <div class="formImage__success">
-                    <h2>{result?.data?.sport[0]?.name.toUpperCase()}? It's right?</h2>
-                    <p><strong>Probability:</strong> {result?.data?.sport[0]?.probability}</p>
-                    <p><strong>Location:</strong> {result?.data?.location[0]?.name}</p>
-                    <p><a target="_blank" href="https://en.wikipedia.org/wiki/{result?.data?.sport[0]?.name}">Look on Wikipedia</a></p>
+                    <h2>{result.data.sport[0].name.toUpperCase()}? It's right?</h2>
+                    <p><strong>Probability:</strong> {result.data.sport[0].probability}</p>
+                    <p><strong>Location:</strong> {result.data.location[0].name}</p>
+                    <p><a target="_blank" href="https://en.wikipedia.org/wiki/{result.data.sport[0].name}">Look on Wikipedia</a></p>
                 </div>
             {:else if loading}
                 <div class="formImage__loading">
